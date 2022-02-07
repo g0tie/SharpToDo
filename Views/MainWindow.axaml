@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SharpToDo.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+        x:Class="SharpToDo.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="SharpToDo"
+        MaxWidth="300"
+        MaxHeight="300"
+        CanResize="false"
+        x:Name="MainWindow"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        >
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="TextBlock.display">    
+            <Setter Property="FontSize" Value="24"/>    
+            <Setter Property="Margin" Value="10,10" />
+        </Style>
+    </Window.Styles>
+
+
+    <StackPanel Name="wrapper">
+        <!-- FIrst Row input field to add a note -->
+        <DockPanel>
+            <TextBox Width="200" Margin="10,0" Name="newNote" Text="{Binding NewNote, Mode=TwoWay}" Watermark="Ajouter une note..."></TextBox>
+            <Button  
+                Command="{Binding addNote}" 
+            CommandParameter="{Binding ElementName=MainWindow}">Ajouter</Button>
+        </DockPanel>
+
+        <!-- First Note for testing  -->
+       <DockPanel Name="0">
+            <TextBlock Margin="10,15" FontWeight="Bold" FontSize="13" TextAlignment="Left">Note test</TextBlock>
+            <Button Command="{Binding removeNote}" >
+
+            <Button.CommandParameter>
+                <MultiBinding>
+                    <Binding ElementName="MainWindow"/>
+                    <Binding Path="$parent.Name" />
+                </MultiBinding>
+            </Button.CommandParameter>
+
+            Supprimer
+            </Button>
+       </DockPanel>
+
+    </StackPanel>
+
+</Window>
