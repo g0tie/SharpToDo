@@ -39,3 +39,12 @@ public static DockPanel generateNote(Note note) \\create UI for the note (delete
 public static void removeNote(string id) \\remove on UI and database then refresh window
 public static void updateNote(Note note) \\update the state of a note
 ```
+## Run & Compile
+
+```bash
+dotnet run \\ run the project 
+dotnet build \\build an executable for your machine then click on it to start the app
+```
+
+## Wirerame
+![image](https://user-images.githubusercontent.com/56622131/152977736-2baaa715-e2a5-485e-9389-17793752b093.png)
