@@ -3,6 +3,8 @@ namespace SharpToDo {
     {
         private int _id = 0;
         private string _todo = "";
+        private bool _state = false;
+
         public int Id
         {
             get { return _id; }
@@ -12,6 +14,12 @@ namespace SharpToDo {
         {
             get { return _todo; }
             set { _todo = value; }
+        }
+
+        public bool State
+        {
+            get { return _state; }
+            set { _state = value; }
         }
     }
 }

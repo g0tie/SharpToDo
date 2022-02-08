@@ -22,7 +22,6 @@ namespace SharpToDo
 {
     public class App : Application
     {
-
         public override void Initialize()
         {
             App.createTable();
@@ -59,7 +58,7 @@ namespace SharpToDo
                 var command = connection.CreateCommand();
                 command.CommandText =
                 @"
-                   CREATE TABLE IF NOT EXISTS notes ( id INTEGER PRIMARY KEY, note TEXT NOT NULL )
+                   CREATE TABLE IF NOT EXISTS notes ( id INTEGER PRIMARY KEY, note TEXT NOT NULL, state INTEGER DEFAULT 0)
                 ";
                 
                 try {
@@ -101,9 +100,9 @@ namespace SharpToDo
 
                             todoNote.Id = Int32.Parse(reader["id"].ToString()) ;
                             todoNote.ToDo =  reader["note"].ToString() ?? "";
+                            todoNote.State = Int32.Parse(reader["state"].ToString()) == 1 ? true : false;
 
                             notes.Add(todoNote);
-
                         }
                     }
 
@@ -149,6 +148,40 @@ namespace SharpToDo
            return result;
         }
 
+        public static int updateTable(int id, int state)
+        {
+             //if error occured 
+            int result = -1;
+
+            using (var connection = new SqliteConnection("Data Source=db.db"))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText =
+                @"
+                    UPDATE notes
+                    SET state = $state
+                    WHERE id = $id
+                ";
+
+                command.Parameters.AddWithValue("$id", id);
+                command.Parameters.AddWithValue("$state", state);
+                
+                try {
+                    result = command.ExecuteNonQuery();
+
+                 } catch (SqliteException e) {
+                    Console.WriteLine(@"Error has occured");
+                }
+
+                connection.Close();
+            }
+
+            //success
+           return result;
+        }
+
         //UI RELATIVE FUNCTIONS
 
         public static void addNote(Window window, Note newNote)
@@ -166,18 +199,27 @@ namespace SharpToDo
             var panel = new DockPanel();
             var deleteBtn = new Button();
             var text = new TextBlock();
+            var checkBox = new CheckBox();
             var deleteCmd = ReactiveCommand.Create<string>(x => App.removeNote(x));
+            var checkTheBox = ReactiveCommand.Create<Note>(x => App.updateNote(x));
 
             //set text values on controls
+            checkBox.IsChecked = note.State;
+            checkBox.Command = checkTheBox;
+            checkBox.CommandParameter = note;
+
             text.Text = note.ToDo;
+
             deleteBtn.Content = "Supprimer";
             deleteBtn.Command =  deleteCmd;
             deleteBtn.CommandParameter = note.Id.ToString();
 
+
             //add Controls to parent
+            panel.Children.Add(checkBox);
             panel.Children.Add(text);
             panel.Children.Add(deleteBtn);
-            panel.Name = note.Id.ToString();
+            panel.Name = "todo_" + note.Id.ToString();
 
             return panel;
         }
@@ -198,12 +240,21 @@ namespace SharpToDo
             {
                 var w = desktop.MainWindow;
                 var wrapper = w.FindControl<StackPanel>("wrapper");
-                var note = w.FindControl<DockPanel>(id);
-                
-                wrapper.Children.Remove(note);
 
+                //Delete from bdd
                 App.deleteFomTable(Int32.Parse(id));
+
+                //refresh interface
+                wrapper.Children.Clear();
+                App.loadNotes(w);
+
+               
             }
+        }
+
+        public static void updateNote(Note note) {
+            note.State = !note.State;
+            App.updateTable(note.Id, note.State ? 1 : 0);
         }
 
 

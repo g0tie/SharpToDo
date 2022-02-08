@@ -54,32 +54,12 @@ namespace SharpToDo.ViewModels
       
         public void addNote(Window window)
         {
+            MainWindowViewModel.insertIntoTable(NewNote);
+
             var wrapper = window.FindControl<StackPanel>("wrapper");
-            
-            var note = generateNote(NewNote);
-
-            wrapper.Children.Add(note);
+            wrapper.Children.Clear();
+            App.loadNotes(window);
         }
-
-        public DockPanel generateNote(string note)
-        {
-            var panel = new DockPanel();
-            var deleteBtn = new Button();
-            var text = new TextBlock();
-
-            //set text values on controls
-            text.Text = note;
-            deleteBtn.Content = "Supprimer";
-
-            //add Controls to parent
-            panel.Children.Add(text);
-            panel.Children.Add(deleteBtn);
-
-            MainWindowViewModel.insertIntoTable(note);
-
-            return panel;
-        }
-
     }
        
 }

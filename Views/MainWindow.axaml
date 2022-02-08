@@ -34,7 +34,7 @@
                 Command="{Binding addNote}" 
             CommandParameter="{Binding ElementName=MainWindow}">Ajouter</Button>
         </DockPanel>
-        
+        <!-- wrapper that contains all notes -->
         <StackPanel Name="wrapper"></StackPanel>
 
     </StackPanel>
