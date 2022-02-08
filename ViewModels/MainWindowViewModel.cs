@@ -32,7 +32,7 @@ namespace SharpToDo.ViewModels
                     var command = connection.CreateCommand();
                     command.CommandText =
                     @"
-                        SELECT note
+                        SELECT *
                         FROM notes
                     ";
 
@@ -203,6 +203,7 @@ namespace SharpToDo.ViewModels
 
             // wrapper.Children.Remove(note);
         }
+      
 
         public void addNote(Window window)
         {
@@ -226,7 +227,8 @@ namespace SharpToDo.ViewModels
             //add Controls to parent
             panel.Children.Add(text);
             panel.Children.Add(deleteBtn);
-            panel.Name = generateId();
+
+            MainWindowViewModel.insertIntoTable(note);
 
             return panel;
         }
