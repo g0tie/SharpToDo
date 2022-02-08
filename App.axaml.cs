@@ -214,10 +214,13 @@ namespace SharpToDo
             text.FontWeight = Avalonia.Media.FontWeight.Bold;
             text.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
             text.MaxWidth = 300;
+            text.Margin = new Thickness(0,0,10,0);
 
             deleteBtn.Content = "Supprimer";
             deleteBtn.Command =  deleteCmd;
             deleteBtn.CommandParameter = note.Id.ToString();
+            deleteBtn.Background = Avalonia.Media.Brush.Parse("#c40e38");
+            deleteBtn.Foreground = Avalonia.Media.Brush.Parse("#fff");
 
 
             //add Controls to parent
@@ -225,6 +228,7 @@ namespace SharpToDo
             panel.Children.Add(text);
             panel.Children.Add(deleteBtn);
             panel.Name = "todo_" + note.Id.ToString();
+            panel.Margin = new Thickness(0, 5);
 
             return panel;
         }

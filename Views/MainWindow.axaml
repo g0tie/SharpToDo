@@ -8,7 +8,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="SharpToDo"
         MaxWidth="400"
-        MaxHeight="300"
+        MaxHeight="500"
         CanResize="false"
         x:Name="MainWindow"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -18,26 +18,24 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Window.Styles>
-        <Style Selector="TextBlock.display">    
-            <Setter Property="FontSize" Value="24"/>    
-            <Setter Property="Margin" Value="10,10" />
-        </Style>
-    </Window.Styles>
-
-
     <StackPanel Margin="10">
         <!-- FIrst Row input field to add a note -->
         <DockPanel>
             <TextBox Width="300" VerticalAlignment="Center" Margin="0,0,10,15" Name="newNote" Text="{Binding NewNote, Mode=TwoWay}" Watermark="Ajouter une note..."></TextBox>
             <Button  
-            Margin="0"
-            VerticalAlignment="Center"
-                Command="{Binding addNote}" 
+            Background="#4ec40e"
+            Foreground="#fff"
+            Height="34"
+            VerticalAlignment="Top"
+            Command="{Binding addNote}" 
             CommandParameter="{Binding ElementName=MainWindow}">Ajouter</Button>
         </DockPanel>
+
         <!-- wrapper that contains all notes -->
-        <StackPanel Name="wrapper"></StackPanel>
+        <ScrollViewer Height="500">
+            <StackPanel Name="wrapper">
+            </StackPanel>
+        </ScrollViewer>
 
     </StackPanel>
 
