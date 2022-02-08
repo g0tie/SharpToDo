@@ -15,11 +15,14 @@ using Newtonsoft.Json;
 using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using SharpToDo;
+using System.Windows.Input;
+using ReactiveUI;
 
 namespace SharpToDo
 {
     public class App : Application
     {
+
         public override void Initialize()
         {
             App.createTable();
@@ -43,6 +46,7 @@ namespace SharpToDo
             // Console.WriteLine(Application.Current);
         }
 
+        //CRUD FUNCTIONS
         public static int createTable()
         {
             //if error occured 
@@ -113,6 +117,40 @@ namespace SharpToDo
             return notes;
         }
 
+         public static int deleteFomTable(int id)
+        {
+             //if error occured 
+            int result = -1;
+
+            using (var connection = new SqliteConnection("Data Source=db.db"))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText =
+                @"
+                    DELETE FROM notes
+                    WHERE id = $id
+                ";
+
+                command.Parameters.AddWithValue("$id", id);
+                
+                try {
+                    result = command.ExecuteNonQuery();
+
+                 } catch (SqliteException e) {
+                    Console.WriteLine(@"Error has occured");
+                }
+
+                connection.Close();
+            }
+
+            //success
+           return result;
+        }
+
+        //UI RELATIVE FUNCTIONS
+
         public static void addNote(Window window, Note newNote)
         {
             var wrapper = window.FindControl<StackPanel>("wrapper");
@@ -121,16 +159,20 @@ namespace SharpToDo
 
             wrapper.Children.Add(note);
         }
+        
 
         public static DockPanel generateNote(Note note)
         {
             var panel = new DockPanel();
             var deleteBtn = new Button();
             var text = new TextBlock();
+            var deleteCmd = ReactiveCommand.Create<string>(x => App.removeNote(x));
 
             //set text values on controls
             text.Text = note.ToDo;
             deleteBtn.Content = "Supprimer";
+            deleteBtn.Command =  deleteCmd;
+            deleteBtn.CommandParameter = note.Id.ToString();
 
             //add Controls to parent
             panel.Children.Add(text);
@@ -148,6 +190,20 @@ namespace SharpToDo
             foreach (Note note in notes) {
                 App.addNote(w, note);
             }            
+        }
+
+        public static void removeNote(string id)
+        {
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var w = desktop.MainWindow;
+                var wrapper = w.FindControl<StackPanel>("wrapper");
+                var note = w.FindControl<DockPanel>(id);
+                
+                wrapper.Children.Remove(note);
+
+                App.deleteFomTable(Int32.Parse(id));
+            }
         }
 
 
