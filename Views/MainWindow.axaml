@@ -26,7 +26,7 @@
     </Window.Styles>
 
 
-    <StackPanel Name="wrapper">
+    <StackPanel>
         <!-- FIrst Row input field to add a note -->
         <DockPanel>
             <TextBox Width="200" Margin="10,0" Name="newNote" Text="{Binding NewNote, Mode=TwoWay}" Watermark="Ajouter une note..."></TextBox>
@@ -34,22 +34,8 @@
                 Command="{Binding addNote}" 
             CommandParameter="{Binding ElementName=MainWindow}">Ajouter</Button>
         </DockPanel>
-
-        <!-- First Note for testing  -->
-       <DockPanel Name="0">
-            <TextBlock Margin="10,15" FontWeight="Bold" FontSize="13" TextAlignment="Left">Note test</TextBlock>
-            <Button Command="{Binding removeNote}" >
-
-            <Button.CommandParameter>
-                <MultiBinding>
-                    <Binding ElementName="MainWindow"/>
-                    <Binding Path="$parent.Name" />
-                </MultiBinding>
-            </Button.CommandParameter>
-
-            Supprimer
-            </Button>
-       </DockPanel>
+        
+        <StackPanel Name="wrapper"></StackPanel>
 
     </StackPanel>
 
