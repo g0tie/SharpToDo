@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using SharpToDo;
 using System.Windows.Input;
 using ReactiveUI;
+using Avalonia.Layout;
 
 namespace SharpToDo
 {
@@ -209,6 +210,10 @@ namespace SharpToDo
             checkBox.CommandParameter = note;
 
             text.Text = note.ToDo;
+            text.VerticalAlignment = VerticalAlignment.Center;
+            text.FontWeight = Avalonia.Media.FontWeight.Bold;
+            text.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+            text.MaxWidth = 300;
 
             deleteBtn.Content = "Supprimer";
             deleteBtn.Command =  deleteCmd;

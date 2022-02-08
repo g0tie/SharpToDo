@@ -7,7 +7,7 @@
         x:Class="SharpToDo.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="SharpToDo"
-        MaxWidth="300"
+        MaxWidth="400"
         MaxHeight="300"
         CanResize="false"
         x:Name="MainWindow"
@@ -26,11 +26,13 @@
     </Window.Styles>
 
 
-    <StackPanel>
+    <StackPanel Margin="10">
         <!-- FIrst Row input field to add a note -->
         <DockPanel>
-            <TextBox Width="200" Margin="10,0" Name="newNote" Text="{Binding NewNote, Mode=TwoWay}" Watermark="Ajouter une note..."></TextBox>
+            <TextBox Width="300" VerticalAlignment="Center" Margin="0,0,10,15" Name="newNote" Text="{Binding NewNote, Mode=TwoWay}" Watermark="Ajouter une note..."></TextBox>
             <Button  
+            Margin="0"
+            VerticalAlignment="Center"
                 Command="{Binding addNote}" 
             CommandParameter="{Binding ElementName=MainWindow}">Ajouter</Button>
         </DockPanel>
